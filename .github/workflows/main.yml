@@ -1,0 +1,34 @@
+name: Node.js Security CI
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # 1. 깃허브 가상머신에 Node.js 20 버전 세팅
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm' # npm 다운로드 속도 부스트!
+
+    # 2. package-lock.json을 기반으로 정확한 버전의 라이브러리 설치
+    - name: Install dependencies
+      run: npm ci
+
+    # 3. 테스트 코드 실행
+    - name: Run Tests
+      run: npm test
+
+    # 4. (보너스) 원작자가 만들어둔 보안 스캔 스크립트 실행
+    - name: Run Security Scan
+      run: node scripts/scan.js
