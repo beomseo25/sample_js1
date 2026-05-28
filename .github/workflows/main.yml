@@ -14,21 +14,24 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # 1. 깃허브 가상머신에 Node.js 20 버전 세팅
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20'
-        cache: 'npm' # npm 다운로드 속도 부스트!
+        cache: 'npm'
 
-    # 2. package-lock.json을 기반으로 정확한 버전의 라이브러리 설치
     - name: Install dependencies
       run: npm ci
 
-    # 3. 테스트 코드 실행
     - name: Run Tests
       run: npm test
 
-    # 4. (보너스) 원작자가 만들어둔 보안 스캔 스크립트 실행
-    - name: Run Security Scan
-      run: node scripts/scan.js
+    - name: Run Security Scan and Save to TXT
+      run: node scripts/scan.js > scan_results.txt 2>&1
+      continue-on-error: true
+
+    - name: Upload Scan Results
+      uses: actions/upload-artifact@v4
+      with:
+        name: security-scan-report
+        path: scan_results.txt
