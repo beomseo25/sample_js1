@@ -1,5 +1,6 @@
 name: Node.js Security CI
 
+
 on:
   push:
     branches: [ "main", "master" ]
