@@ -1,5 +1,7 @@
-name: Node.js Security CI
+name: Node.js Security CI & Docker Push (Performance Metrics Layer)
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 on:
   push:
@@ -8,9 +10,9 @@ on:
     branches: [ "main", "master" ]
 
 jobs:
-  build-and-test:
+  test-and-scan:
+    name: Test
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -36,3 +38,27 @@ jobs:
       with:
         name: security-scan-report
         path: scan_results.txt
+
+  docker-push:
+    name: Docker hub push
+    runs-on: ubuntu-latest
+    needs: test-and-scan
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/git_action_js
