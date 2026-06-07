@@ -4,3 +4,10 @@
   fail_on_prepare_env_warning: true
   events:
   - type: WEBHOOK
+  actions:
+  - action: npm install
+    type: BUILD
+    commands: npm install
+    shell: BASH
+    docker_image_name: library/node
+    docker_image_tag: 24
