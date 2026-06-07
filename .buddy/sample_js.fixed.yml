@@ -11,3 +11,9 @@
     shell: BASH
     docker_image_name: library/node
     docker_image_tag: 24
+  - action: npm test
+    type: BUILD
+    commands: npm test
+    shell: BASH
+    docker_image_name: library/node
+    docker_image_tag: 24
