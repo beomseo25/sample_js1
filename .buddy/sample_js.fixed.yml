@@ -17,3 +17,10 @@
     shell: BASH
     docker_image_name: library/node
     docker_image_tag: 24
+  - action: Build Docker image
+    type: DOCKERFILE
+    docker_image_tag: lastest
+    docker_registry: DOCKER_HUB
+    do_not_prune_images: true
+    integration: dlawjdals
+    repository: dlawjdals/buddy_js
