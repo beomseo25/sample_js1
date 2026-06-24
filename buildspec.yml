@@ -1,0 +1,31 @@
+version: 0.2
+
+env:
+  variables:
+    DOCKER_USERNAME: "beomseo25"
+  parameter-store:
+    DOCKER_PASSWORD: "/docker/password"
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo "Node.js 패키지 설치 중..."
+      - npm install
+  pre_build:
+    commands:
+      - echo "테스트 코드를 실행합니다..."
+      - npm test 
+      - echo "테스트 통과! Docker Hub 로그인 진행 중..."
+      - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+  build:
+    commands:
+      - echo "JavaScript Docker 이미지 빌드 시작..."
+      # 도커 규칙에 맞춰 무조건 소문자로 작성!
+      - docker build -t $DOCKER_USERNAME/sample_javascript:latest .
+  post_build:
+    commands:
+      - echo "Docker Hub에 이미지 푸시 중..."
+      - docker push $DOCKER_USERNAME/sample_javascript:latest
+      - echo "CI 빌드 및 푸시 완료!"
