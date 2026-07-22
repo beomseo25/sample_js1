@@ -19,7 +19,7 @@
     docker_image_tag: 20
   - action: Build Docker image
     type: DOCKERFILE
-    docker_image_tag: lastest
+    docker_image_tag: latest
     docker_registry: DOCKER_HUB
     do_not_prune_images: true
     integration: dlawjdals
