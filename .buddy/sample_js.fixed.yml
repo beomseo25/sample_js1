@@ -10,13 +10,13 @@
     commands: npm install
     shell: BASH
     docker_image_name: library/node
-    docker_image_tag: 24
+    docker_image_tag: 20
   - action: npm test
     type: BUILD
     commands: npm test
     shell: BASH
     docker_image_name: library/node
-    docker_image_tag: 24
+    docker_image_tag: 20
   - action: Build Docker image
     type: DOCKERFILE
     docker_image_tag: lastest
